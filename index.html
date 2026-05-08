@@ -3,16 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ChatGPT 全球价格对比</title>
+<title>ChatGPT 全球价格对比 | 实时汇率换算</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<style>
+/* 对标网站质感增强 */
+body {
+    background-color: #f5f7fa;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+.card {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+}
+.card:hover {
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.1);
+}
+</style>
 </head>
-<body class="bg-[#f7f8fa] text-[#1d2129]">
+<body class="text-gray-800">
 
 <!-- 顶部导航 -->
 <div class="bg-white shadow-sm border-b border-gray-200">
   <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
     <div class="text-lg font-semibold text-blue-600">GPT Price</div>
-    <div class="text-sm text-gray-500">全球GPT充值价格实时对比</div>
+    <div class="text-sm text-gray-500">数据更新于：<span id="update-time"></span></div>
   </div>
 </div>
 
@@ -20,11 +35,12 @@
 <div class="max-w-5xl mx-auto px-4 py-6">
 
   <!-- 应用信息卡片 -->
-  <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+  <div class="bg-white rounded-xl p-6 mb-6 card">
     <div class="flex items-center gap-5">
+      <!-- 修复后的ChatGPT官方图标链接 -->
       <img 
-        src="https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/62/36/cb/6236cbaa-ec7b-8da6-8043-8dd5c39d9d00/AppIcon-0-0-1x_U007emarketing-0-0-0-85-220.png/120x120bb.jpg" 
-        class="w-16 h-16 rounded-2xl"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/ChatGPT_logo.svg/120px-ChatGPT_logo.svg.png" 
+        class="w-16 h-16 rounded-2xl bg-gray-100 p-2"
         alt="ChatGPT"
       >
       <div>
@@ -36,19 +52,19 @@
 
   <!-- 价格概览 -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-    <div class="bg-white p-5 rounded-xl shadow-sm">
+    <div class="bg-white p-5 rounded-xl card">
       <p class="text-sm text-gray-500">全球最低价格</p>
-      <p class="text-2xl font-bold text-green-600 mt-1">¥72.99</p>
+      <p class="text-2xl font-bold text-green-600 mt-1" id="min-price">¥72.99</p>
       <p class="text-sm text-gray-600 mt-1">土耳其</p>
     </div>
-    <div class="bg-white p-5 rounded-xl shadow-sm">
+    <div class="bg-white p-5 rounded-xl card">
       <p class="text-sm text-gray-500">全球最高价格</p>
-      <p class="text-2xl font-bold text-red-600 mt-1">¥184.99</p>
+      <p class="text-2xl font-bold text-red-600 mt-1" id="max-price">¥184.99</p>
       <p class="text-sm text-gray-600 mt-1">德国 / 法国</p>
     </div>
-    <div class="bg-white p-5 rounded-xl shadow-sm">
+    <div class="bg-white p-5 rounded-xl card">
       <p class="text-sm text-gray-500">最高差价</p>
-      <p class="text-2xl font-bold text-blue-600 mt-1">¥112</p>
+      <p class="text-2xl font-bold text-blue-600 mt-1" id="diff-price">¥112.00</p>
       <p class="text-sm text-gray-600 mt-1">约 61%</p>
     </div>
   </div>
@@ -56,14 +72,14 @@
   <!-- 表格标题 -->
   <div class="flex justify-between items-center mb-3">
     <h2 class="text-lg font-bold">ChatGPT Plus 全球地区价格（人民币）</h2>
-    <span class="text-xs text-gray-500">按实时汇率换算</span>
+    <span class="text-xs text-gray-500">按实时汇率换算，数据每30秒模拟更新</span>
   </div>
 
   <!-- 价格表格 -->
-  <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+  <div class="bg-white rounded-xl overflow-hidden card">
     <table class="w-full text-sm">
       <thead>
-        <tr class="bg-[#f7f8fa] text-left">
+        <tr class="bg-gray-50 text-left">
           <th class="px-4 py-3 font-medium text-gray-600">排名</th>
           <th class="px-4 py-3 font-medium text-gray-600">地区</th>
           <th class="px-4 py-3 font-medium text-gray-600">当地价格</th>
@@ -71,70 +87,8 @@
           <th class="px-4 py-3 font-medium text-gray-600">状态</th>
         </tr>
       </thead>
-      <tbody>
-        <tr class="border-b border-gray-100 bg-green-50">
-          <td class="px-4 py-3">1</td>
-          <td class="px-4 py-3">土耳其</td>
-          <td class="px-4 py-3">₺499.99</td>
-          <td class="px-4 py-3 font-semibold">¥72.99</td>
-          <td class="px-4 py-3 text-green-600 font-medium">最低</td>
-        </tr>
-        <tr class="border-b border-gray-100">
-          <td class="px-4 py-3">2</td>
-          <td class="px-4 py-3">菲律宾</td>
-          <td class="px-4 py-3">₱999</td>
-          <td class="px-4 py-3">¥114.99</td>
-          <td class="px-4 py-3"></td>
-        </tr>
-        <tr class="border-b border-gray-100">
-          <td class="px-4 py-3">3</td>
-          <td class="px-4 py-3">日本</td>
-          <td class="px-4 py-3">¥3000</td>
-          <td class="px-4 py-3">¥129.99</td>
-          <td class="px-4 py-3"></td>
-        </tr>
-        <tr class="border-b border-gray-100">
-          <td class="px-4 py-3">4</td>
-          <td class="px-4 py-3">美国</td>
-          <td class="px-4 py-3">$19.99</td>
-          <td class="px-4 py-3">¥136.99</td>
-          <td class="px-4 py-3"></td>
-        </tr>
-        <tr class="border-b border-gray-100">
-          <td class="px-4 py-3">5</td>
-          <td class="px-4 py-3">加拿大</td>
-          <td class="px-4 py-3">C$24.99</td>
-          <td class="px-4 py-3">¥125.99</td>
-          <td class="px-4 py-3"></td>
-        </tr>
-        <tr class="border-b border-gray-100">
-          <td class="px-4 py-3">6</td>
-          <td class="px-4 py-3">韩国</td>
-          <td class="px-4 py-3">₩29000</td>
-          <td class="px-4 py-3">¥134.99</td>
-          <td class="px-4 py-3"></td>
-        </tr>
-        <tr class="border-b border-gray-100">
-          <td class="px-4 py-3">7</td>
-          <td class="px-4 py-3">英国</td>
-          <td class="px-4 py-3">£19.99</td>
-          <td class="px-4 py-3">¥179.99</td>
-          <td class="px-4 py-3"></td>
-        </tr>
-        <tr class="border-b border-gray-100 bg-red-50">
-          <td class="px-4 py-3">8</td>
-          <td class="px-4 py-3">德国</td>
-          <td class="px-4 py-3">€22.99</td>
-          <td class="px-4 py-3 font-semibold">¥184.99</td>
-          <td class="px-4 py-3 text-red-600 font-medium">最高</td>
-        </tr>
-        <tr class="border-b border-gray-100 bg-red-50">
-          <td class="px-4 py-3">9</td>
-          <td class="px-4 py-3">法国</td>
-          <td class="px-4 py-3">€22.99</td>
-          <td class="px-4 py-3 font-semibold">¥184.99</td>
-          <td class="px-4 py-3 text-red-600 font-medium">最高</td>
-        </tr>
+      <tbody id="price-table">
+        <!-- 数据由JS动态生成 -->
       </tbody>
     </table>
   </div>
@@ -147,5 +101,89 @@
 
 </div>
 
+<script>
+// 模拟原始价格数据
+const baseData = [
+    { rank: 1, region: "土耳其", localPrice: "₺499.99", cny: 72.99, status: "最低" },
+    { rank: 2, region: "菲律宾", localPrice: "₱999", cny: 114.99, status: "" },
+    { rank: 3, region: "日本", localPrice: "¥3000", cny: 129.99, status: "" },
+    { rank: 4, region: "美国", localPrice: "$19.99", cny: 136.99, status: "" },
+    { rank: 5, region: "加拿大", localPrice: "C$24.99", cny: 125.99, status: "" },
+    { rank: 6, region: "韩国", localPrice: "₩29000", cny: 134.99, status: "" },
+    { rank: 7, region: "英国", localPrice: "£19.99", cny: 179.99, status: "" },
+    { rank: 8, region: "德国", localPrice: "€22.99", cny: 184.99, status: "最高" },
+    { rank: 9, region: "法国", localPrice: "€22.99", cny: 184.99, status: "最高" }
+];
+
+// 更新时间显示
+function updateTime() {
+    document.getElementById('update-time').textContent = dayjs().format('YYYY-MM-DD HH:mm:ss');
+}
+
+// 模拟汇率波动（±3%）
+function simulateRateChange() {
+    return baseData.map(item => {
+        const fluctuation = (Math.random() * 0.06) - 0.03; // -3% ~ +3%
+        const newCny = (item.cny * (1 + fluctuation)).toFixed(2);
+        return { ...item, cny: newCny };
+    });
+}
+
+// 渲染表格
+function renderTable(data) {
+    const tableBody = document.getElementById('price-table');
+    tableBody.innerHTML = '';
+
+    data.forEach((item, index) => {
+        let rowClass = 'border-b border-gray-100';
+        let statusClass = '';
+        if (item.status === '最低') {
+            rowClass += ' bg-green-50';
+            statusClass = 'text-green-600 font-medium';
+        } else if (item.status === '最高') {
+            rowClass += ' bg-red-50';
+            statusClass = 'text-red-600 font-medium';
+        }
+
+        const tr = document.createElement('tr');
+        tr.className = rowClass;
+        tr.innerHTML = `
+            <td class="px-4 py-3">${item.rank}</td>
+            <td class="px-4 py-3">${item.region}</td>
+            <td class="px-4 py-3">${item.localPrice}</td>
+            <td class="px-4 py-3 font-semibold">¥${item.cny}</td>
+            <td class="px-4 py-3 ${statusClass}">${item.status}</td>
+        `;
+        tableBody.appendChild(tr);
+    });
+
+    // 更新概览数据
+    const prices = data.map(item => parseFloat(item.cny));
+    const minPrice = Math.min(...prices).toFixed(2);
+    const maxPrice = Math.max(...prices).toFixed(2);
+    const diffPrice = (maxPrice - minPrice).toFixed(2);
+
+    document.getElementById('min-price').textContent = `¥${minPrice}`;
+    document.getElementById('max-price').textContent = `¥${maxPrice}`;
+    document.getElementById('diff-price').textContent = `¥${diffPrice}`;
+}
+
+// 初始化页面
+function init() {
+    updateTime();
+    const newData = simulateRateChange();
+    renderTable(newData);
+}
+
+// 页面加载完成后执行
+document.addEventListener('DOMContentLoaded', init);
+
+// 每30秒模拟更新一次
+setInterval(() => {
+    updateTime();
+    const newData = simulateRateChange();
+    renderTable(newData);
+}, 30000);
+</script>
 </body>
 </html>
