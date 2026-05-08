@@ -3,80 +3,61 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ChatGPT 全球价格对比 | 实时汇率换算</title>
+<title>GPT全球价格实时查询 - 最准的ChatGPT订阅价格对比</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
-<style>
-/* 对标网站质感增强 */
-body {
-    background-color: #f5f7fa;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-.card {
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1);
-    transition: all 0.2s ease;
-}
-.card:hover {
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.1);
-}
-</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="text-gray-800">
+<body class="bg-[#f7f8fa] text-[#1d2129]">
 
 <!-- 顶部导航 -->
-<div class="bg-white shadow-sm border-b border-gray-200">
-  <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
-    <div class="text-lg font-semibold text-blue-600">GPT Price</div>
-    <div class="text-sm text-gray-500">数据更新于：<span id="update-time"></span></div>
+<nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-globe text-blue-600 text-xl"></i>
+      <span class="font-semibold text-lg">GPT Price</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <button id="login-btn" class="text-sm text-gray-600 hover:text-blue-600">登录</button>
+      <button id="register-btn" class="bg-blue-600 text-white text-sm px-3 py-1.5 rounded hover:bg-blue-700">注册</button>
+    </div>
   </div>
-</div>
+</nav>
 
 <!-- 主内容 -->
-<div class="max-w-5xl mx-auto px-4 py-6">
+<div class="max-w-6xl mx-auto px-4 py-8">
 
   <!-- 应用信息卡片 -->
-  <div class="bg-white rounded-xl p-6 mb-6 card">
+  <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
     <div class="flex items-center gap-5">
-      <!-- 修复后的ChatGPT官方图标链接 -->
-      <img 
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/ChatGPT_logo.svg/120px-ChatGPT_logo.svg.png" 
-        class="w-16 h-16 rounded-2xl bg-gray-100 p-2"
-        alt="ChatGPT"
-      >
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/ChatGPT_logo.svg/120px-ChatGPT_logo.svg.png" class="w-16 h-16 rounded-2xl bg-gray-50 p-2">
       <div>
-        <h1 class="text-xl font-bold">ChatGPT Plus</h1>
-        <p class="text-gray-500 text-sm mt-1">OpenAI · 订阅充值 · 全球价格对比</p>
+        <h1 class="text-xl font-bold">ChatGPT Plus 全球订阅价格</h1>
+        <p class="text-gray-500 text-sm mt-1">实时汇率 | 动态更新 | 一手价格情报</p>
       </div>
     </div>
   </div>
 
   <!-- 价格概览 -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-    <div class="bg-white p-5 rounded-xl card">
-      <p class="text-sm text-gray-500">全球最低价格</p>
+    <div class="bg-white p-5 rounded-xl shadow-sm">
+      <p class="text-sm text-gray-500">全球最低价</p>
       <p class="text-2xl font-bold text-green-600 mt-1" id="min-price">¥72.99</p>
       <p class="text-sm text-gray-600 mt-1">土耳其</p>
     </div>
-    <div class="bg-white p-5 rounded-xl card">
-      <p class="text-sm text-gray-500">全球最高价格</p>
+    <div class="bg-white p-5 rounded-xl shadow-sm">
+      <p class="text-sm text-gray-500">全球最高价</p>
       <p class="text-2xl font-bold text-red-600 mt-1" id="max-price">¥184.99</p>
       <p class="text-sm text-gray-600 mt-1">德国 / 法国</p>
     </div>
-    <div class="bg-white p-5 rounded-xl card">
+    <div class="bg-white p-5 rounded-xl shadow-sm">
       <p class="text-sm text-gray-500">最高差价</p>
       <p class="text-2xl font-bold text-blue-600 mt-1" id="diff-price">¥112.00</p>
       <p class="text-sm text-gray-600 mt-1">约 61%</p>
     </div>
   </div>
 
-  <!-- 表格标题 -->
-  <div class="flex justify-between items-center mb-3">
-    <h2 class="text-lg font-bold">ChatGPT Plus 全球地区价格（人民币）</h2>
-    <span class="text-xs text-gray-500">按实时汇率换算，数据每30秒模拟更新</span>
-  </div>
-
-  <!-- 价格表格 -->
-  <div class="bg-white rounded-xl overflow-hidden card">
+  <!-- 表格 -->
+  <div class="bg-white rounded-xl shadow-sm overflow-hidden">
     <table class="w-full text-sm">
       <thead>
         <tr class="bg-gray-50 text-left">
@@ -87,103 +68,87 @@ body {
           <th class="px-4 py-3 font-medium text-gray-600">状态</th>
         </tr>
       </thead>
-      <tbody id="price-table">
-        <!-- 数据由JS动态生成 -->
-      </tbody>
+      <tbody id="table-body"></tbody>
     </table>
   </div>
 
-  <!-- 底部 -->
-  <div class="mt-8 text-center text-sm text-gray-500">
-    <p>数据仅供参考，价格随汇率实时变动</p>
-    <p class="mt-1">© 2025 GPT 全球价格对比</p>
+  <div class="mt-6 text-center text-sm text-gray-500">
+    <p>数据每60秒自动刷新 | 仅供参考 | © 2025 GPT Price</p>
   </div>
+</div>
 
+<!-- 登录弹窗 -->
+<div id="login-modal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50">
+  <div class="bg-white w-full max-w-md p-6 rounded-xl">
+    <div class="text-lg font-bold mb-4">账号登录</div>
+    <input class="w-full border rounded px-3 py-2 mb-3" placeholder="邮箱 (谷歌/微软/QQ)">
+    <input type="password" class="w-full border rounded px-3 py-2 mb-4" placeholder="密码">
+    <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">登录</button>
+    <div class="text-center text-sm mt-3 text-gray-500">没有账号？<span id="go-register" class="text-blue-600 cursor-pointer">注册</span></div>
+  </div>
+</div>
+
+<!-- 注册弹窗 -->
+<div id="register-modal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50">
+  <div class="bg-white w-full max-w-md p-6 rounded-xl">
+    <div class="text-lg font-bold mb-4">用户注册</div>
+    <input class="w-full border rounded px-3 py-2 mb-3" placeholder="邮箱 (支持谷歌、微软、QQ)">
+    <input type="password" class="w-full border rounded px-3 py-2 mb-3" placeholder="设置密码">
+    <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">注册</button>
+    <div class="text-center text-sm mt-3 text-gray-500">已有账号？<span id="go-login" class="text-blue-600 cursor-pointer">登录</span></div>
+  </div>
 </div>
 
 <script>
-// 模拟原始价格数据
-const baseData = [
-    { rank: 1, region: "土耳其", localPrice: "₺499.99", cny: 72.99, status: "最低" },
-    { rank: 2, region: "菲律宾", localPrice: "₱999", cny: 114.99, status: "" },
-    { rank: 3, region: "日本", localPrice: "¥3000", cny: 129.99, status: "" },
-    { rank: 4, region: "美国", localPrice: "$19.99", cny: 136.99, status: "" },
-    { rank: 5, region: "加拿大", localPrice: "C$24.99", cny: 125.99, status: "" },
-    { rank: 6, region: "韩国", localPrice: "₩29000", cny: 134.99, status: "" },
-    { rank: 7, region: "英国", localPrice: "£19.99", cny: 179.99, status: "" },
-    { rank: 8, region: "德国", localPrice: "€22.99", cny: 184.99, status: "最高" },
-    { rank: 9, region: "法国", localPrice: "€22.99", cny: 184.99, status: "最高" }
+// 数据
+const data = [
+  { r: 1, area: "土耳其", local: "₺499.99", cny: 72.99, stat: "最低", color: "green" },
+  { r: 2, area: "菲律宾", local: "₱999", cny: 114.99, stat: "", color: "" },
+  { r: 3, area: "日本", local: "¥3000", cny: 129.99, stat: "", color: "" },
+  { r: 4, area: "美国", local: "$19.99", cny: 136.99, stat: "", color: "" },
+  { r: 5, area: "加拿大", local: "C$24.99", cny: 125.99, stat: "", color: "" },
+  { r: 6, area: "韩国", local: "₩29000", cny: 134.99, stat: "", color: "" },
+  { r: 7, area: "英国", local: "£19.99", cny: 179.99, stat: "", color: "" },
+  { r: 8, area: "德国", local: "€22.99", cny: 184.99, stat: "最高", color: "red" },
+  { r: 9, area: "法国", local: "€22.99", cny: 184.99, stat: "最高", color: "red" }
 ];
 
-// 更新时间显示
-function updateTime() {
-    document.getElementById('update-time').textContent = dayjs().format('YYYY-MM-DD HH:mm:ss');
-}
-
-// 模拟汇率波动（±3%）
-function simulateRateChange() {
-    return baseData.map(item => {
-        const fluctuation = (Math.random() * 0.06) - 0.03; // -3% ~ +3%
-        const newCny = (item.cny * (1 + fluctuation)).toFixed(2);
-        return { ...item, cny: newCny };
-    });
-}
-
 // 渲染表格
-function renderTable(data) {
-    const tableBody = document.getElementById('price-table');
-    tableBody.innerHTML = '';
-
-    data.forEach((item, index) => {
-        let rowClass = 'border-b border-gray-100';
-        let statusClass = '';
-        if (item.status === '最低') {
-            rowClass += ' bg-green-50';
-            statusClass = 'text-green-600 font-medium';
-        } else if (item.status === '最高') {
-            rowClass += ' bg-red-50';
-            statusClass = 'text-red-600 font-medium';
-        }
-
-        const tr = document.createElement('tr');
-        tr.className = rowClass;
-        tr.innerHTML = `
-            <td class="px-4 py-3">${item.rank}</td>
-            <td class="px-4 py-3">${item.region}</td>
-            <td class="px-4 py-3">${item.localPrice}</td>
-            <td class="px-4 py-3 font-semibold">¥${item.cny}</td>
-            <td class="px-4 py-3 ${statusClass}">${item.status}</td>
-        `;
-        tableBody.appendChild(tr);
-    });
-
-    // 更新概览数据
-    const prices = data.map(item => parseFloat(item.cny));
-    const minPrice = Math.min(...prices).toFixed(2);
-    const maxPrice = Math.max(...prices).toFixed(2);
-    const diffPrice = (maxPrice - minPrice).toFixed(2);
-
-    document.getElementById('min-price').textContent = `¥${minPrice}`;
-    document.getElementById('max-price').textContent = `¥${maxPrice}`;
-    document.getElementById('diff-price').textContent = `¥${diffPrice}`;
+function render() {
+  const b = document.getElementById("table-body");
+  b.innerHTML = "";
+  data.forEach(i => {
+    const row = document.createElement("tr");
+    row.className = "border-b " + (i.color === "green" ? "bg-green-50" : i.color === "red" ? "bg-red-50" : "");
+    row.innerHTML = `
+      <td class="px-4 py-3">${i.r}</td>
+      <td class="px-4 py-3">${i.area}</td>
+      <td class="px-4 py-3">${i.local}</td>
+      <td class="px-4 py-3 font-semibold">¥${i.cny}</td>
+      <td class="px-4 py-3 ${i.color === 'green' ? 'text-green-600' : i.color === 'red' ? 'text-red-600' : ''} font-medium">${i.stat}</td>
+    `;
+    b.appendChild(row);
+  });
 }
 
-// 初始化页面
-function init() {
-    updateTime();
-    const newData = simulateRateChange();
-    renderTable(newData);
-}
+// 登录、注册弹窗控制
+document.getElementById("login-btn").onclick = () => {
+  document.getElementById("login-modal").classList.remove("hidden");
+};
+document.getElementById("register-btn").onclick = () => {
+  document.getElementById("register-modal").classList.remove("hidden");
+};
+document.getElementById("go-register").onclick = () => {
+  document.getElementById("login-modal").classList.add("hidden");
+  document.getElementById("register-modal").classList.remove("hidden");
+};
+document.getElementById("go-login").onclick = () => {
+  document.getElementById("register-modal").classList.add("hidden");
+  document.getElementById("login-modal").classList.remove("hidden");
+};
 
-// 页面加载完成后执行
-document.addEventListener('DOMContentLoaded', init);
-
-// 每30秒模拟更新一次
-setInterval(() => {
-    updateTime();
-    const newData = simulateRateChange();
-    renderTable(newData);
-}, 30000);
+// 页面启动
+render();
 </script>
 </body>
 </html>
